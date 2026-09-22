@@ -1,0 +1,192 @@
+{
+  "name": "GeoPilot Traffic Surveillance Agent",
+  "system_prompt": "You are GeoPilot, an AI traffic surveillance assistant. You analyze real-time traffic data from CCTV feeds and provide voice-based alerts, reports, and analysis. You can detect anomalies, track vehicle counts, monitor traffic flow, identify incidents, and provide geospatial insights. Be concise, direct, and prioritize safety-critical information. Lead with the answer, skip preamble. Use technical terms accurately but explain complex findings simply.",
+  "voice": { "voice_id": "anna" },
+  "greeting": "GeoPilot traffic surveillance active. What would you like to monitor?",
+  "keyterms": [
+    "GeoPilot",
+    "TrafficLab",
+    "incident detection",
+    "vehicle count",
+    "traffic flow",
+    "congestion",
+    "anomaly detection",
+    "surveillance",
+    "CCTV",
+    "digital twin",
+    "geospatial",
+    "homography",
+    "YOLO",
+    "object tracking"
+  ],
+  "tools": [
+    {
+      "name": "get_traffic_stats",
+      "description": "Get current traffic statistics for a specific camera or zone",
+      "url": "https://5e1a-102-88-114-171.ngrok-free.app/tools/get_traffic_stats",
+      "method": "POST",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "camera_id": {
+            "type": "string",
+            "description": "CCTV camera identifier"
+          },
+          "zone": {
+            "type": "string",
+            "description": "Geographic zone or intersection name"
+          }
+        },
+        "required": ["camera_id"]
+      }
+    },
+    {
+      "name": "detect_incidents",
+      "description": "Check for traffic incidents or anomalies in a specific area",
+      "url": "https://5e1a-102-88-114-171.ngrok-free.app/tools/detect_incidents",
+      "method": "POST",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "area": {
+            "type": "string",
+            "description": "Geographic area or zone to check"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["low", "medium", "high", "critical"],
+            "description": "Minimum severity level to report"
+          }
+        },
+        "required": ["area"]
+      }
+    },
+    {
+      "name": "get_vehicle_count",
+      "description": "Get real-time vehicle count and classification for a camera",
+      "url": "https://5e1a-102-88-114-171.ngrok-free.app/tools/get_vehicle_count",
+      "method": "POST",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "camera_id": {
+            "type": "string",
+            "description": "CCTV camera identifier"
+          },
+          "time_range": {
+            "type": "string",
+            "description": "Time range (e.g., '5m', '1h', '24h')"
+          }
+        },
+        "required": ["camera_id"]
+      }
+    },
+    {
+      "name": "analyze_traffic_flow",
+      "description": "Analyze traffic flow patterns and congestion levels",
+      "url": "https://5e1a-102-88-114-171.ngrok-free.app/tools/analyze_traffic_flow",
+      "method": "POST",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "route": {
+            "type": "string",
+            "description": "Route or corridor to analyze"
+          },
+          "direction": {
+            "type": "string",
+            "enum": ["northbound", "southbound", "eastbound", "westbound", "all"],
+            "description": "Traffic direction to analyze"
+          }
+        },
+        "required": ["route"]
+      }
+    },
+    {
+      "name": "get_speed_data",
+      "description": "Get average speed and speed distribution for vehicles",
+      "url": "https://5e1a-102-88-114-171.ngrok-free.app/tools/get_speed_data",
+      "method": "POST",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "camera_id": {
+            "type": "string",
+            "description": "CCTV camera identifier"
+          },
+          "vehicle_type": {
+            "type": "string",
+            "enum": ["all", "car", "truck", "bus", "motorcycle", "bicycle"],
+            "description": "Vehicle type filter"
+          }
+        },
+        "required": ["camera_id"]
+      }
+    },
+    {
+      "name": "generate_report",
+      "description": "Generate a traffic analysis report for a specific time period",
+      "url": "https://5e1a-102-88-114-171.ngrok-free.app/tools/generate_report",
+      "method": "POST",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "time_period": {
+            "type": "string",
+            "description": "Time period for the report (e.g., 'today', 'last_hour', '2024-01-15')"
+          },
+          "metrics": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["volume", "speed", "incidents", "congestion", "anomalies"]
+            },
+            "description": "Metrics to include in the report"
+          }
+        },
+        "required": ["time_period"]
+      }
+    },
+    {
+      "name": "set_alert_threshold",
+      "description": "Set alert thresholds for traffic monitoring",
+      "url": "https://5e1a-102-88-114-171.ngrok-free.app/tools/set_alert_threshold",
+      "method": "POST",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "metric": {
+            "type": "string",
+            "enum": ["speed", "volume", "congestion", "incident"],
+            "description": "Metric to set threshold for"
+          },
+          "threshold": {
+            "type": "number",
+            "description": "Threshold value"
+          },
+          "camera_id": {
+            "type": "string",
+            "description": "Camera ID (optional, applies globally if not set)"
+          }
+        },
+        "required": ["metric", "threshold"]
+      }
+    },
+    {
+      "name": "get_camera_status",
+      "description": "Get status of all surveillance cameras",
+      "url": "https://5e1a-102-88-114-171.ngrok-free.app/tools/get_camera_status",
+      "method": "POST",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "status_filter": {
+            "type": "string",
+            "enum": ["all", "online", "offline", "maintenance"],
+            "description": "Filter cameras by status"
+          }
+        }
+      }
+    }
+  ]
+}

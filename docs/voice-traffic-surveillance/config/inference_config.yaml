@@ -1,0 +1,113 @@
+# GeoPilot Traffic Surveillance Voice Agent Configuration
+
+# Voice Agent Settings
+voice_agent:
+  name: "GeoPilot Traffic Surveillance Agent"
+  description: "AI-powered voice-controlled traffic surveillance system"
+  version: "1.0.0"
+
+# AssemblyAI Configuration
+assemblyai:
+  api_key: "${ASSEMBLYAI_API_KEY}"
+  voice_id: "anna"
+  greeting: "GeoPilot traffic surveillance active. What would you like to monitor?"
+  system_prompt: |
+    You are GeoPilot, an AI traffic surveillance assistant. You analyze real-time traffic data 
+    from CCTV feeds and provide voice-based alerts, reports, and analysis. You can detect 
+    anomalies, track vehicle counts, monitor traffic flow, identify incidents, and provide 
+    geospatial insights. Be concise, direct, and prioritize safety-critical information. 
+    Lead with the answer, skip preamble. Use technical terms accurately but explain complex 
+    findings simply.
+
+# Traffic Analysis Server
+traffic_server:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 4
+
+# Camera Network Configuration
+cameras:
+  default_fps: 30
+  default_resolution: "1920x1080"
+  network_timeout: 30
+  reconnect_interval: 5
+
+# Object Detection (YOLO Integration)
+detection:
+  model_path: "models/yolov8s.pt"
+  confidence_threshold: 0.5
+  nms_threshold: 0.4
+  input_size: [640, 640]
+  classes:
+    - car
+    - truck
+    - bus
+    - motorcycle
+    - bicycle
+    - pedestrian
+
+# Object Tracking
+tracking:
+  tracker: "bytetrack"
+  max_age: 30
+  min_hits: 3
+  iou_threshold: 0.3
+
+# Traffic Analysis Parameters
+analysis:
+  free_flow_speed: 60  # km/h
+  congestion_thresholds:
+    low: 25
+    medium: 50
+    high: 75
+  incident_detection:
+    enabled: true
+    min_confidence: 0.8
+    alert_cooldown: 300  # seconds
+
+# Alert Configuration
+alerts:
+  enabled: true
+  channels:
+    - voice
+    - websocket
+    - webhook
+  severity_levels:
+    - low
+    - medium
+    - high
+    - critical
+  webhook_url: "${ALERT_WEBHOOK_URL}"
+
+# Kinematics & Smoothing
+kinematics:
+  speed_smoothing:
+    method: "exponential_moving_average"
+    alpha: 0.3
+  position_smoothing:
+    method: "kalman_filter"
+    process_noise: 0.01
+    measurement_noise: 0.1
+
+# Visualization (Digital Twin)
+visualization:
+  enabled: true
+  mode: "side_by_side"  # side_by_single, satellite_only, cctv_only
+  show_3d_bbox: true
+  show_speed: true
+  show_orientation: true
+  refresh_rate: 30  # fps
+
+# Logging & Monitoring
+logging:
+  level: "INFO"
+  file: "logs/traffic_surveillance.log"
+  max_size: "100MB"
+  backup_count: 5
+
+# Performance
+performance:
+  max_concurrent_streams: 10
+  queue_size: 100
+  batch_size: 16
+  gpu_enabled: true
